@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 import codecs
-
+import os
 def read_json_file(filename):
     data_list = []
     with codecs.open(filename, 'r', 'utf-8') as file:
@@ -94,15 +94,35 @@ def write_to_excel(data, output_filename):
     df.to_excel(output_filename, index=False)
     print(f"已将数据成功写入 {output_filename} 文件。")
 
+def read_json_file(filename):
+    with open(filename, 'r') as file:
+        return json.load(file)
+
+def merge_data(dismap_data, httpx_data):
+    pass
+
+def write_to_excel(data, filename):
+    pass
+
+def find_json_file(prefix, directory="."):
+    for filename in os.listdir(directory):
+        if filename.startswith(prefix) and filename.endswith(".json"):
+            return filename
+    raise FileNotFoundError(f"No files found with prefix {prefix}")
+
 def main():
-    dismap_file = input("请输入Dismap的JSON文件名（包括文件扩展名）：")
-    httpx_file = input("请输入HTTPX的JSON文件名（包括文件扩展名）：")
+    try:
+        dismap_file = find_json_file("dismap")
+        httpx_file = find_json_file("httpx")
+        print(f"Found Dismap file: {dismap_file}")
+        print(f"Found HTTPX file: {httpx_file}")
+        dismap_data = read_json_file(dismap_file)
+        httpx_data = read_json_file(httpx_file)
+        merged_data = merge_data(dismap_data, httpx_data)
+        write_to_excel(merged_data, "merged_data.xlsx")
 
-    dismap_data = read_json_file(dismap_file)
-    httpx_data = read_json_file(httpx_file)
-
-    merged_data = merge_data(dismap_data, httpx_data)
-    write_to_excel(merged_data, "merged_data.xlsx")
+    except FileNotFoundError as e:
+        print(e)
 
 if __name__ == "__main__":
     main()
