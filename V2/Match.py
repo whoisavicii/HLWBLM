@@ -2,6 +2,7 @@ import json
 import pandas as pd
 import codecs
 import os
+
 def read_json_file(filename):
     data_list = []
     with codecs.open(filename, 'r', 'utf-8') as file:
@@ -88,21 +89,10 @@ def merge_data(dismap_data, httpx_data):
     
     return merged_data
 
-
 def write_to_excel(data, output_filename):
     df = pd.DataFrame(data)
     df.to_excel(output_filename, index=False)
     print(f"已将数据成功写入 {output_filename} 文件。")
-
-def read_json_file(filename):
-    with open(filename, 'r') as file:
-        return json.load(file)
-
-def merge_data(dismap_data, httpx_data):
-    pass
-
-def write_to_excel(data, filename):
-    pass
 
 def find_json_file(prefix, directory="."):
     for filename in os.listdir(directory):
